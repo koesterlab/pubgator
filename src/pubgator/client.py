@@ -160,7 +160,9 @@ class PubGator:
 
         Example:
             >>> results = client.autocomplete("remdesivir", concept=BioConcept.CHEMICAL)
-            >>> description = results[0].description
+            >>> for entity in results:
+            >>>     print(entity.name)
+            >>>     print(entity.description)
         """
         url = EntityRequest.build_url(self.base_url, query, concept, limit)
         response = self._make_request(url)

@@ -1,5 +1,5 @@
 [project]
-authors = [{name = "Felix Wiegand", email = "fxwiegand@wgdnet.de"}]
+authors = [{name = "Felix Wiegand", email = "felix.wiegand@tu-dortmund.de"}]
 name = "pubgator"
 requires-python = ">= 3.11"
 version = "0.1.0"

@@ -1,0 +1,34 @@
+name: CI
+on:
+    push:
+        branches:
+        - main
+    pull_request:
+        branches:
+        - main
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v4
+        - name: setup-pixi
+          uses: prefix-dev/setup-pixi@v0.8.3
+          with:
+            environments: dev
+        - name: formatting
+          if: always()
+          run: |
+            pixi run format --check
+        - name: linting
+          if: always()
+          run: |
+            pixi run lint
+        - name: typechecking
+          if: always()
+          run: |
+            pixi run typecheck
+        - name: test
+          if: always()
+          run: |
+            pixi run test

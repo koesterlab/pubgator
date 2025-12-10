@@ -1,4 +1,3 @@
-import pytest
 from pubgator import PubGator, BioConcept
 
 

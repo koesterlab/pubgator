@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/koesterlab/pubgator/compare/v0.1.2...v0.1.3) (2025-12-11)
+
+
+### Miscellaneous Chores
+
+* release 0.1.3 ([8224daf](https://github.com/koesterlab/pubgator/commit/8224daf3bd5b4186e75ce2c6d16052d6a5c415ef))
+
 ## [0.1.2](https://github.com/koesterlab/pubgator/compare/v0.1.1...v0.1.2) (2025-12-11)
 
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.4](https://github.com/koesterlab/pubgator/compare/v0.1.3...v0.1.4) (2025-12-11)
+
+
+### Documentation
+
+* Add badges to README ([a0b912a](https://github.com/koesterlab/pubgator/commit/a0b912af7b64b302d3c8dc4cccafd7e6cec9d552))
+
 ## [0.1.3](https://github.com/koesterlab/pubgator/compare/v0.1.2...v0.1.3) (2025-12-11)
 
 

@@ -21,8 +21,13 @@ pg = PubGator()
 publications = pg.search("@CHEMICAL_remdesivir", max_ret=100)
 pmids = [publication.pmid for publication in publications]
 
-# Retrieve full annotations for the set of publications
+
+# Retrieve full annotations for the set of publications and print their abstracts
 annotations = pg.export_publications(pmids=pmids, format=ExportFormat.BIOC)
+for annotation in annotations.documents:
+    for passage in annotation.passages:
+            if passage.infons.get("type") == "abstract":
+                print(passage.text)
 
 # Find entities
 entities = pg.autocomplete("cancer", concept=BioConcept.DISEASE)

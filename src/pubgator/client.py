@@ -31,28 +31,28 @@ class PubGator:
     """
 
     DEFAULT_BASE_URL = "https://www.ncbi.nlm.nih.gov/research/pubtator3-api"
-    MAX_REQUESTS_PER_SECOND = 3
+    TIME_EPSILON = 1e-4
 
     def __init__(
         self,
         base_url: str = DEFAULT_BASE_URL,
         timeout: float = 10.0,
         rate_limit: bool = True,
+        max_requests_per_second: int = 3,
     ):
         """Initialize PubGator client.
 
         Args:
             base_url: Base URL for PubTator3 API
             timeout: Request timeout in seconds
-            rate_limit: Whether to enforce rate limiting (3 req/sec)
+            rate_limit: Whether to enforce rate limiting
+            max_requests_per_second: Maximum number of requests per second (default: 3)
         """
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         self.rate_limit = rate_limit
         self._last_request_time = 0.0
-        self._request_interval = (
-            1.0 / self.MAX_REQUESTS_PER_SECOND if rate_limit else 0.0
-        )
+        self._request_interval = 1.0 / max_requests_per_second if rate_limit else 0.0
 
         self.client = httpx.Client(timeout=timeout)
 
@@ -65,7 +65,7 @@ class PubGator:
         time_since_last = current_time - self._last_request_time
 
         if time_since_last < self._request_interval:
-            time.sleep(self._request_interval - time_since_last)
+            time.sleep(self._request_interval - time_since_last + self.TIME_EPSILON)
 
         self._last_request_time = time.time()
 

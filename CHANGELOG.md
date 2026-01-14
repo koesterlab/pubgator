@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.4](https://github.com/koesterlab/pubgator/compare/v0.1.3...v0.1.4) (2026-01-14)
+
+
+### Bug Fixes
+
+* Make rate limit configurable and add time epsilon ([80f928d](https://github.com/koesterlab/pubgator/commit/80f928d140ca2551288e6adfed2a9ee7127d4bf5))
+
+
+### Documentation
+
+* Add badges to README ([a0b912a](https://github.com/koesterlab/pubgator/commit/a0b912af7b64b302d3c8dc4cccafd7e6cec9d552))
+* Improve README.md with abstract retrieval ([6c15858](https://github.com/koesterlab/pubgator/commit/6c158588215051fa9ea72f2b3e088ca7ff268794))
+
 ## [0.1.3](https://github.com/koesterlab/pubgator/compare/v0.1.2...v0.1.3) (2025-12-11)
 
 

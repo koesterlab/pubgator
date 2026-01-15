@@ -69,28 +69,51 @@ class PubGator:
 
         self._last_request_time = time.time()
 
-    def _make_request(self, url: str) -> httpx.Response:
-        """Make HTTP request with rate limiting.
+    def _make_request(self, url: str, retries: int = 3) -> httpx.Response:
+        """Make HTTP request with retry logic and exponential backoff.
 
         Args:
             url: Complete URL to request
+            retries: Maximum number of retry attempts
 
         Returns:
             HTTP response
 
         Raises:
-            httpx.HTTPError: If request fails
+            httpx.HTTPError: If request fails after all retries
         """
-        self._enforce_rate_limit()
-        response = self.client.get(url)
-        response.raise_for_status()
-        return response
+        for attempt in range(retries):
+            try:
+                self._enforce_rate_limit()
+                response = self.client.get(url)
+
+                if response.status_code == 429:
+                    time.sleep(int(response.headers.get("Retry-After", 60)))
+                    continue
+
+                response.raise_for_status()
+                return response
+
+            except (httpx.TimeoutException, httpx.NetworkError):
+                if attempt == retries - 1:
+                    raise
+                time.sleep(2**attempt)
+
+            except httpx.HTTPStatusError as e:
+                if e.response.status_code < 500:
+                    raise
+                if attempt == retries - 1:
+                    raise
+                time.sleep(2**attempt)
+
+        raise httpx.HTTPError(f"Failed after {retries} attempts")
 
     def export_publications(
         self,
         pmids: list[int],
         format: ExportFormat = ExportFormat.BIOC,
         full: bool = False,
+        retries: int = 3,
     ) -> Any:
         """Export annotations for publications by PMID.
 
@@ -98,6 +121,7 @@ class PubGator:
             pmids: List of PubMed IDs
             format: Export format (pubtator, biocxml, biocjson)
             full: Whether to include full text (only for biocxml/biocjson)
+            retries: Maximum number of retry attempts
 
         Returns:
             Exported data as string (pubtator/biocxml) or dict (biocjson)
@@ -106,18 +130,22 @@ class PubGator:
             >>> client.export_publications(["29355051"], format=ExportFormat.BIOCJSON)
         """
         url = ExportRequest.build_url(self.base_url, format, pmids, full)
-        response = self._make_request(url)
+        response = self._make_request(url, retries)
 
         return self._export_results(response, format)
 
     def export_pmc_publications(
-        self, pmcids: list[str], format: ExportFormat = ExportFormat.BIOC
+        self,
+        pmcids: list[str],
+        format: ExportFormat = ExportFormat.BIOC,
+        retries: int = 3,
     ) -> Any:
         """Export full-text publications by PMC ID.
 
         Args:
             pmcids: List of PMC IDs (e.g., ['PMC7696669'])
             format: Export format (biocxml or biocjson only)
+            retries: Maximum number of retry attempts
 
         Returns:
             Exported data as string (biocxml) or dict (biocjson)
@@ -129,7 +157,7 @@ class PubGator:
             raise ValueError("PMC export does not support pubtator format")
 
         url = ExportRequest.build_pmc_url(self.base_url, format, pmcids)
-        response = self._make_request(url)
+        response = self._make_request(url, retries)
 
         return self._export_results(response, format)
 
@@ -147,6 +175,7 @@ class PubGator:
         query: str,
         concept: Optional[BioConcept] = None,
         limit: Optional[int] = None,
+        retries: int = 3,
     ) -> list[AutocompleteResult]:
         """Find entity IDs through autocomplete.
 
@@ -154,6 +183,7 @@ class PubGator:
             query: Free text search query
             concept: Optional bioconcept type to filter by
             limit: Maximum number of results to return
+            retries: Maximum number of retry attempts
 
         Returns:
             List of autocomplete results with entity IDs
@@ -165,7 +195,7 @@ class PubGator:
             >>>     print(entity.description)
         """
         url = EntityRequest.build_url(self.base_url, query, concept, limit)
-        response = self._make_request(url)
+        response = self._make_request(url, retries)
         data = response.json()
 
         results = []
@@ -183,7 +213,9 @@ class PubGator:
 
         return results
 
-    def search(self, query: str, max_ret: int = 100) -> list[Publication]:
+    def search(
+        self, query: str, max_ret: int = 100, retries: int = 3
+    ) -> list[Publication]:
         """Search PubTator3 for publications.
 
         Supports free text, entity IDs, boolean queries, and relation queries.
@@ -191,6 +223,7 @@ class PubGator:
         Args:
             query: Search query (text, entity ID, or relation query)
             max_ret: Maximum number of results to return. Defaults to 100. Paging is automatically handled by PubGator.
+            retries: Maximum number of retry attempts
 
         Returns:
             Search results as dictionary
@@ -209,12 +242,12 @@ class PubGator:
             >>> client.search("relations:treat|@CHEMICAL_Doxorubicin|@DISEASE_Neoplasms")
         """
         url = SearchRequest.build_url(self.base_url, query)
-        response = self._make_request(url).json()
+        response = self._make_request(url, retries).json()
         total_pages = min(response["total_pages"], max_ret // 10 + 1)
         results = response["results"]
         for page in range(2, total_pages + 1):
             url = SearchRequest.build_url(self.base_url, query, page)
-            response = self._make_request(url).json()
+            response = self._make_request(url, retries).json()
             results.extend(response["results"])
         results = results[:max_ret]
         publications = [Publication.from_json(pub) for pub in results]
@@ -225,14 +258,15 @@ class PubGator:
         e1: str,
         type: Optional[RelationType] = None,
         e2: Optional[BioConcept] = None,
+        retries: int = 3,
     ) -> list[Relation]:
         """Search for specific relations between two entities.
 
         Args:
-            relation_type: Type of relation (e.g., RelationType.NEGATIVE_CORRELATE)
             entity1: First entity ID
+            relation_type: Type of relation (e.g., RelationType.NEGATIVE_CORRELATE)
             entity2: Second entity ID or entity type
-            page: Page number for pagination
+            retries: Maximum number of retry attempts
 
         Returns:
             Search results as list of Relation objects
@@ -253,7 +287,7 @@ class PubGator:
             ... )
         """
         query = RelationRequest.build_url(self.base_url, e1, type, e2)
-        response = self._make_request(query)
+        response = self._make_request(query, retries)
         relations = [Relation.from_json(rel) for rel in response.json()]
         return relations
 

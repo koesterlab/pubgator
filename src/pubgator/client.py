@@ -88,7 +88,7 @@ class PubGator:
                 response = self.client.get(url)
 
                 if response.status_code == 429:
-                    time.sleep(int(response.headers.get("Retry-After", 60)))
+                    time.sleep(int(response.headers.get("Retry-After", 3)))
                     continue
 
                 response.raise_for_status()

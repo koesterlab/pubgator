@@ -94,7 +94,11 @@ class PubGator:
                 response.raise_for_status()
                 return response
 
-            except (httpx.TimeoutException, httpx.NetworkError):
+            except (
+                httpx.TimeoutException,
+                httpx.NetworkError,
+                httpx.RemoteProtocolError,
+            ):
                 if attempt == retries - 1:
                     raise
                 time.sleep(2**attempt)

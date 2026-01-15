@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/koesterlab/pubgator/compare/v0.1.4...v0.1.5) (2026-01-15)
+
+
+### Bug Fixes
+
+* Make Publication hashable and comparable ([#6](https://github.com/koesterlab/pubgator/issues/6)) ([f63fcb7](https://github.com/koesterlab/pubgator/commit/f63fcb7011494691aa050c4c5f2eb5436ac56b3a))
+
 ## [0.1.4](https://github.com/koesterlab/pubgator/compare/v0.1.3...v0.1.4) (2026-01-14)
 
 

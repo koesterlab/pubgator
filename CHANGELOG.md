@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/koesterlab/pubgator/compare/v0.1.5...v0.2.0) (2026-01-15)
+
+
+### Features
+
+* Add retries and backoff to HTTP requests ([#8](https://github.com/koesterlab/pubgator/issues/8)) ([b93a857](https://github.com/koesterlab/pubgator/commit/b93a8578954f4ea9ba55181dc47451404fc8cefa))
+
 ## [0.1.5](https://github.com/koesterlab/pubgator/compare/v0.1.4...v0.1.5) (2026-01-15)
 
 

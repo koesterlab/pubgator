@@ -110,6 +110,8 @@ class PubGator:
                     raise
                 time.sleep(2**attempt)
 
+        raise httpx.HTTPError(f"Failed after {retries} attempts")
+
     def export_publications(
         self,
         pmids: list[int],

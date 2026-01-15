@@ -92,6 +92,14 @@ class Publication:
     text_hl: Optional[str] = None
     citations: Optional[Dict] = None
 
+    def __hash__(self):
+        return hash(self.pmid)
+
+    def __eq__(self, other):
+        if isinstance(other, Publication):
+            return self.pmid == other.pmid
+        return False
+
     @classmethod
     def from_json(cls, data: dict) -> "Publication":
         return cls(

@@ -1,8 +1,8 @@
+<img src="logo.svg" alt="pubgator" width="500"/>
+
 ![PyPI - Version](https://img.shields.io/pypi/v/pubgator)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/koesterlab/pubgator/main.yml)
 ![GitHub License](https://img.shields.io/github/license/koesterlab/pubgator)
-
-# ![pubgator](logo.svg)
 
 A lightweight python wrapper for the [PubTator3 API](https://www.ncbi.nlm.nih.gov/research/pubtator3/).
 PubGator allows to easily interact with the PubTator API.

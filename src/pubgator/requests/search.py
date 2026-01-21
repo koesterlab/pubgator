@@ -17,7 +17,7 @@ class SearchRequest:
         Args:
             base_url: Base API URL
             text: Search query (can be free text, entity ID, or relation query)
-            sections: Optional sections to search in (e.g., "Title", "Abstract", ...)
+            sections: Optional sections to search in (e.g., 'title', 'abstract', ...)
             page: Optional page number for pagination
 
         Returns:

@@ -1,5 +1,5 @@
 import time
-from typing import Optional, Any
+from typing import Optional, Any, List
 from bioc import biocxml
 import httpx
 
@@ -218,7 +218,11 @@ class PubGator:
         return results
 
     def search(
-        self, query: str, max_ret: int = 100, retries: int = 3
+        self,
+        query: str,
+        sections: Optional[List[str]] = None,
+        max_ret: int = 100,
+        retries: int = 3,
     ) -> list[Publication]:
         """Search PubTator3 for publications.
 
@@ -226,6 +230,7 @@ class PubGator:
 
         Args:
             query: Search query (text, entity ID, or relation query)
+            sections: List of sections to search in. Defaults to None. This means all sections will be used. Available sections are: 'title', 'abstract', 'conclusion', 'discussion', 'results', 'methods', and 'introduction'
             max_ret: Maximum number of results to return. Defaults to 100. Paging is automatically handled by PubGator.
             retries: Maximum number of retry attempts
 
@@ -245,12 +250,12 @@ class PubGator:
             >>> # Relation search
             >>> client.search("relations:treat|@CHEMICAL_Doxorubicin|@DISEASE_Neoplasms")
         """
-        url = SearchRequest.build_url(self.base_url, query)
+        url = SearchRequest.build_url(self.base_url, query, sections)
         response = self._make_request(url, retries).json()
         total_pages = min(response["total_pages"], max_ret // 10 + 1)
         results = response["results"]
         for page in range(2, total_pages + 1):
-            url = SearchRequest.build_url(self.base_url, query, page)
+            url = SearchRequest.build_url(self.base_url, query, sections, page)
             response = self._make_request(url, retries).json()
             results.extend(response["results"])
         results = results[:max_ret]

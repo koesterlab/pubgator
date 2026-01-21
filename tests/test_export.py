@@ -3,9 +3,8 @@ from pubgator import PubGator, ExportFormat
 
 class TestExportPublications:
     def test_export_biocxml(self, client: PubGator):
-        result = client.export_publications(pmids=[29355051], format=ExportFormat.BIOC)
-
-        assert result.documents[0].id == "29355051"
+        result = client.export_publications(pmids=[36543932], format=ExportFormat.BIOC)
+        assert result.documents[0].id == "36543932"
 
     def test_export_biocjson(self, client: PubGator):
         result = client.export_publications(pmids=[29355051], format=ExportFormat.JSON)

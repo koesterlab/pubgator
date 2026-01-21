@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.3.0](https://github.com/koesterlab/pubgator/compare/v0.2.0...v0.3.0) (2026-01-21)
+
+
+### Features
+
+* Support section-based search in client ([#12](https://github.com/koesterlab/pubgator/issues/12)) ([77b5b4a](https://github.com/koesterlab/pubgator/commit/77b5b4ae5e0fa0da0d710847bcd3018fceacff20))
+
+
+### Documentation
+
+* Add logo.svg and include in README.md ([#10](https://github.com/koesterlab/pubgator/issues/10)) ([b18ec41](https://github.com/koesterlab/pubgator/commit/b18ec413cb5d142b7c506713af5bc2215e2b406a))
+* Convert logo text to SVG paths ([2789da1](https://github.com/koesterlab/pubgator/commit/2789da116a8f673a38f9a8c025043e4693b921ba))
+* Update logo ([b2eefd3](https://github.com/koesterlab/pubgator/commit/b2eefd3086e2fc2a22acaa451f727d2419481cb1))
+* Update README to improve logo display ([d7ad528](https://github.com/koesterlab/pubgator/commit/d7ad5288702b7d70b0de986c7a8a5eeac3415b3b))
+
 ## [0.2.0](https://github.com/koesterlab/pubgator/compare/v0.1.5...v0.2.0) (2026-01-15)
 
 

@@ -1,6 +1,9 @@
 [project]
 authors = [{name = "Felix Wiegand", email = "felix.wiegand@tu-dortmund.de"}]
 name = "pubgator"
+description = "A lightweight python wrapper for the PubTator3 API"
+readme = "README.md"
+license = "MIT"
 requires-python = ">= 3.11"
 version = "0.3.0"
 dependencies = [

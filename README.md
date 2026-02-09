@@ -1,6 +1,7 @@
 <img src="logo.svg" alt="pubgator" width="500"/>
 
 ![PyPI - Version](https://img.shields.io/pypi/v/pubgator)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pubgator)
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/koesterlab/pubgator/main.yml)
 ![GitHub License](https://img.shields.io/github/license/koesterlab/pubgator)
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.1](https://github.com/koesterlab/pubgator/compare/v0.3.0...v0.3.1) (2026-02-09)
+
+
+### Documentation
+
+* Add pypi downloads badge ([be7e4c3](https://github.com/koesterlab/pubgator/commit/be7e4c347bc4520274ca66dd9148bf617129e04f))
+
 ## [0.3.0](https://github.com/koesterlab/pubgator/compare/v0.2.0...v0.3.0) (2026-01-21)
 
 
